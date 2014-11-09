@@ -46,7 +46,9 @@ int main() {
     }
     
     cout << "Player : " << name << " has won the game !\n" << endl;
-    cout << "Game Terminated" << endl;
+    
+    cout << "Game Terminated !" << endl;
+    
     
     
     return 0;
