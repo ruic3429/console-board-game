@@ -17,8 +17,23 @@ int main() {
     string name;
     Player* player = new Player(name);
     string move;
+    int row;
+    int col;
 
     cout << "Welcome to the Board Game !\n" << endl;
+    
+    cout << "Please input number of rows on board: ";
+    cin >> row;
+    cout << endl;
+    
+    cout << "Please input number of columns on board: ";
+    cin >> col;
+    cout << "\n" << endl;
+    
+    cout << "Your board has " << row << " rows, and " << col << " columns" << endl;
+    cout << "There are " << row*col << " tiles on the board. \n" << endl;
+    
+    
     cout << "Please select the number of players: ";
     cin >> num_Player;
     cout << "" << endl;

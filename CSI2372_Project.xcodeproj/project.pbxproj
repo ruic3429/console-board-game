@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		186212FD1A10805D00B4D89E /* TileFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 186212FB1A10805D00B4D89E /* TileFactory.cpp */; };
 		18C9DC071A0D684E00B71487 /* GameBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18C9DC051A0D684E00B71487 /* GameBoard.cpp */; };
 		18F8B2BB1A0D334A00ADF560 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18F8B2BA1A0D334A00ADF560 /* main.cpp */; };
 		18F8B2C31A0D33A400ADF560 /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18F8B2C11A0D33A400ADF560 /* Tile.cpp */; };
@@ -26,6 +27,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		186212FB1A10805D00B4D89E /* TileFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TileFactory.cpp; sourceTree = "<group>"; };
+		186212FC1A10805D00B4D89E /* TileFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TileFactory.h; sourceTree = "<group>"; };
 		18C9DC051A0D684E00B71487 /* GameBoard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameBoard.cpp; sourceTree = "<group>"; };
 		18C9DC061A0D684E00B71487 /* GameBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBoard.h; sourceTree = "<group>"; };
 		18F8B2B71A0D334A00ADF560 /* CSI2372_Project */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CSI2372_Project; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +76,8 @@
 				18F8B2C51A0D345E00ADF560 /* Player.h */,
 				18C9DC051A0D684E00B71487 /* GameBoard.cpp */,
 				18C9DC061A0D684E00B71487 /* GameBoard.h */,
+				186212FB1A10805D00B4D89E /* TileFactory.cpp */,
+				186212FC1A10805D00B4D89E /* TileFactory.h */,
 			);
 			path = CSI2372_Project;
 			sourceTree = "<group>";
@@ -134,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				18C9DC071A0D684E00B71487 /* GameBoard.cpp in Sources */,
+				186212FD1A10805D00B4D89E /* TileFactory.cpp in Sources */,
 				18F8B2BB1A0D334A00ADF560 /* main.cpp in Sources */,
 				18F8B2C31A0D33A400ADF560 /* Tile.cpp in Sources */,
 				18F8B2C61A0D345E00ADF560 /* Player.cpp in Sources */,

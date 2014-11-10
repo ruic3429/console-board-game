@@ -7,3 +7,27 @@
 //
 
 #include "Player.h"
+
+bool Player::canAct() const{
+    
+    if(food <= 0){
+        return false;
+    }
+    return true;
+
+}
+
+//bool Player::pay(<#Player &player#>){
+//
+//    return true;
+//}
+
+void Player::eat(){
+
+    if(food > 0){
+        food--;
+    }
+    
+}
+
+

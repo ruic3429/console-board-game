@@ -15,9 +15,8 @@
 
 enum class Move{up, down, left, right};
 
-template <typename J, class T>
+template <typename J, typename T>
 class GameBoard {
-private:
     
 public:
     void add(const T& title, int row, int col);
