@@ -19,6 +19,8 @@ template <typename J, typename T>
 class GameBoard {
     
 public:
+    GameBoard(int row,int col){
+    };
     void add(const T& title, int row, int col);
     const T& getTile(int row, int col) const;
     void getCoordinate(const T &tile, int *row, int *col) const;

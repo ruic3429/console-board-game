@@ -12,20 +12,28 @@
 using namespace std;
 
 template <typename J, typename T>
+
 void add(const T& tile, int row, int col){
 
-    
+    for(int i = 0; i < row; i++ ){
+        for (int j = 0; j < col; j++){
+            //GameBoard[i][j] = tile;
+        }
+    }
     
 }
 
 template <typename J, typename T>
 const T& getTile(int row, int col){
 
+    
+    
 }
 
 template <typename J, typename T>
 void getCoordinate(const T& tile, int *row, int *col){
 
+    
 
 }
 
