@@ -10,7 +10,6 @@
 		186212FD1A10805D00B4D89E /* TileFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 186212FB1A10805D00B4D89E /* TileFactory.cpp */; };
 		18C9DC071A0D684E00B71487 /* GameBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18C9DC051A0D684E00B71487 /* GameBoard.cpp */; };
 		18F8B2BB1A0D334A00ADF560 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18F8B2BA1A0D334A00ADF560 /* main.cpp */; };
-		18F8B2C31A0D33A400ADF560 /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18F8B2C11A0D33A400ADF560 /* Tile.cpp */; };
 		18F8B2C61A0D345E00ADF560 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18F8B2C41A0D345E00ADF560 /* Player.cpp */; };
 /* End PBXBuildFile section */
 
@@ -33,7 +32,6 @@
 		18C9DC061A0D684E00B71487 /* GameBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameBoard.h; sourceTree = "<group>"; };
 		18F8B2B71A0D334A00ADF560 /* CSI2372_Project */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CSI2372_Project; sourceTree = BUILT_PRODUCTS_DIR; };
 		18F8B2BA1A0D334A00ADF560 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		18F8B2C11A0D33A400ADF560 /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tile.cpp; sourceTree = "<group>"; };
 		18F8B2C21A0D33A400ADF560 /* Tile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tile.h; sourceTree = "<group>"; };
 		18F8B2C41A0D345E00ADF560 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		18F8B2C51A0D345E00ADF560 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
@@ -70,7 +68,6 @@
 			isa = PBXGroup;
 			children = (
 				18F8B2BA1A0D334A00ADF560 /* main.cpp */,
-				18F8B2C11A0D33A400ADF560 /* Tile.cpp */,
 				18F8B2C21A0D33A400ADF560 /* Tile.h */,
 				18F8B2C41A0D345E00ADF560 /* Player.cpp */,
 				18F8B2C51A0D345E00ADF560 /* Player.h */,
@@ -141,7 +138,6 @@
 				18C9DC071A0D684E00B71487 /* GameBoard.cpp in Sources */,
 				186212FD1A10805D00B4D89E /* TileFactory.cpp in Sources */,
 				18F8B2BB1A0D334A00ADF560 /* main.cpp in Sources */,
-				18F8B2C31A0D33A400ADF560 /* Tile.cpp in Sources */,
 				18F8B2C61A0D345E00ADF560 /* Player.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

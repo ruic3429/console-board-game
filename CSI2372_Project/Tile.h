@@ -14,9 +14,9 @@
 
 class Tile{
 
-    bool operator==(const Tile &t);
-    virtual bool action( Player& player);
-    virtual Tile* clone();
+//    bool operator==(const Tile &t);
+//    virtual bool action( Player& player);
+//    virtual Tile* clone();
     //ostream& operator<<
     
 

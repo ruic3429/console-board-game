@@ -20,24 +20,24 @@ int main() {
     vector<string> nameCollection;
     string name;
     //vector<Player*> player;
-    string move;
+    string input;
+    int rows;
+    int cols;
     int row;
     int col;
-//    int rRow;
-//    int rCol;
 
     cout << "Welcome to the Board Game !\n" << endl;
     
     cout << "Please input number of rows on board: ";
-    cin >> row;
-    cout << endl;
-    
-    cout << "Please input number of columns on board: ";
-    cin >> col;
+    cin >> rows;
     cout << "\n" << endl;
     
-    cout << "Your board has " << row << " rows, and " << col << " columns" << endl;
-    cout << "There are " << row*col << " tiles on the board. \n" << endl;
+    cout << "Please input number of columns on board: ";
+    cin >> cols;
+    cout << "\n" << endl;
+    
+    cout << "Your board has " << rows << " rows, and " << cols << " columns" << endl;
+    cout << "There are " << (rows)*(cols) << " tiles on the board. \n" << endl;
     
     
     cout << "Please select the number of players: ";
@@ -62,38 +62,55 @@ int main() {
     cout << "Generating Board, please wait...\n" << endl;
     
     //Generte Board
-    GameBoard<Tile, Player> * board = new GameBoard<Tile, Player>(row,col,num_Player);
-    for (int i = 0; i<10; i++) {
-        for (int j = 0; j<10; j++) {
+    GameBoard<Tile, Player> * board = new GameBoard<Tile, Player>(rows,cols,num_Player);
+    for (int i = 0; i< rows; i++) {
+        for (int j = 0; j< cols; j++) {
             Tile * t = new Tile();
             board->add(*t, i, j);
             delete t;
         }
     }
-    board->setPlayer(*player, row, col);
+    
+    board->setPlayer(*player, rows, cols);
     
     cout << "Board generated successfully !\n" << endl;
     
+    board->getPlayerCoordinates(player->getName(), &row, &col);
+    cout << "Initial Location: " << "[" << row << "][" << col << "]\n" << endl;
     
-//    rRow = rand() % row + 1;
-//    rCol = rand() % col + 1;
+    while(player->getRuby() != 0){
+        board->getPlayerCoordinates(player->getName(), &row, &col);
+        cout << "\nYou are at " << "[" << row << "][" << col << "]" << endl;
+        board->printNeighbours(row, col);
+        std::cout<<"Where do you want to move?"<<std::endl;
+        //getline(std::cin,input);
+        cin >> input;
+        if (input=="down") {
+            GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::DOWN;
+            std::string str = player->getName();
+            board->move(move, str);
+        }else if (input=="up"){
+            GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::UP;
+            std::string str = player->getName();
+            board->move(move, str);
+        }else if (input=="left"){
+            GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::LEFT;
+            std::string str = player->getName();
+            board->move(move, str);
+        }else if (input=="right"){
+            GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::RIGHT;
+            std::string str = player->getName();
+            board->move(move, str);
+        }else{
+            cout << "Unidentified Command." << endl;
+        }
 
-    
-    //cout << "You are at " << "[" << rRow << "][" << rCol << "]" << endl;
-    
-    while(player->ruby != 5){
-        cout << "Please make a move: ";
-        cin >> move;
-        cout << "\n" <<endl;
-        
-        cout << "You move from ( " << move << " ) to ( " << move << " )\n" <<endl;
     }
     
     
-    cout << "Player : " << name << " has won the game !\n" << endl;
+    cout << "Player : " << player->getName() << " has won the game !\n" << endl;
     
     cout << "Game Terminated !" << endl;
-    
     
     
     return 0;
