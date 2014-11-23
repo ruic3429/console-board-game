@@ -25,14 +25,15 @@ int main() {
     int cols;
     int row;
     int col;
+    string playerOnMove;
 
     cout << "Welcome to the Board Game !\n" << endl;
     
-    cout << "Please input number of rows on board: ";
+    cout << "Please input number of rows on board (rows is integer): ";
     cin >> rows;
     cout << "\n" << endl;
     
-    cout << "Please input number of columns on board: ";
+    cout << "Please input number of columns on board (cols is integer): ";
     cin >> cols;
     cout << "\n" << endl;
     
@@ -78,7 +79,7 @@ int main() {
     board->getPlayerCoordinates(player->getName(), &row, &col);
     cout << "Initial Location: " << "[" << row << "][" << col << "]\n" << endl;
     
-    while(player->getRuby() != 0){
+    while(player->getRuby() != 5){
         board->getPlayerCoordinates(player->getName(), &row, &col);
         cout << "\nYou are at " << "[" << row << "][" << col << "]" << endl;
         board->printNeighbours(row, col);
@@ -87,20 +88,20 @@ int main() {
         cin >> input;
         if (input=="down") {
             GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::DOWN;
-            std::string str = player->getName();
-            board->move(move, str);
+            playerOnMove = player->getName();
+            board->move(move, playerOnMove);
         }else if (input=="up"){
             GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::UP;
-            std::string str = player->getName();
-            board->move(move, str);
+            playerOnMove = player->getName();
+            board->move(move, playerOnMove);
         }else if (input=="left"){
             GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::LEFT;
-            std::string str = player->getName();
-            board->move(move, str);
+            playerOnMove = player->getName();
+            board->move(move, playerOnMove);
         }else if (input=="right"){
             GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::RIGHT;
-            std::string str = player->getName();
-            board->move(move, str);
+            playerOnMove = player->getName();
+            board->move(move, playerOnMove);
         }else{
             cout << "Unidentified Command." << endl;
         }

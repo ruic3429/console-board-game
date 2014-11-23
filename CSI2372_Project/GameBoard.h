@@ -103,7 +103,8 @@ void GameBoard<T,J>::setPlayer(J player, int rows, int columns){
     temp.row = rand() % rows + 1;
     temp.col = rand() % columns + 1;
     playerList.push_back(temp);
-    grid[temp.row][temp.col].currentPlayers.push_back(player);
+    grid.at(temp.row).at(temp.col).currentPlayers.push_back(player);
+
 }
 
 template <class T, class J>
@@ -180,50 +181,54 @@ void GameBoard<T,J>::moveUpdate(GameBoard::playerRef& pRef, enum Move move){
     switch (move) {
         case UP:
             try {
-                if ((pRef.row-1)<1) {
-                    cout << "\n**** Out of Range error, can not go UP ****" << endl;
-                }else{
-                grid[pRef.row-1][pRef.col].currentPlayers.push_back(pRef.player);
+//                if ((pRef.row-1)<1) {
+//                    cout << "\n**** Out of Range error, can not go UP ****" << endl;
+//                }else{
+                //grid[pRef.row-1][pRef.col].currentPlayers.emplace_back(pRef.player);
+                grid.at(pRef.row-1).at(pRef.col).currentPlayers.emplace_back(pRef.player);
                 pRef.row--;
-                }
+               // }
             } catch (const std::out_of_range& oor) {
-                std::cerr << "Out of Range error: " << oor.what() << '\n';
+                std::cerr << "\n**** Out of Range error, can not go UP ****" << '\n';
             }
             break;
         case DOWN:
             try {
-                if((pRef.row+1)>rows){
-                    cout << "\n**** Out of Range error, can not go DOWN ****" << endl;
-                }else{
-                grid[pRef.row+1][pRef.col].currentPlayers.push_back(pRef.player);
+//                if((pRef.row+1)>rows){
+//                    cout << "\n**** Out of Range error, can not go DOWN ****" << endl;
+//                }else{
+                //grid[pRef.row+1][pRef.col].currentPlayers.emplace_back(pRef.player);
+                grid.at(pRef.row+1).at(pRef.col).currentPlayers.emplace_back(pRef.player);
                 pRef.row++;
-                }
+             //   }
             } catch (const std::out_of_range& oor) {
-                std::cerr << "Out of Range error: " << oor.what() << '\n';
+                std::cerr << "\n**** Out of Range error, can not go DOWN ****" << '\n';
             }
             break;
         case LEFT:
             try {
-                if((pRef.col-1)<1){
-                cout << "\n**** Out of Range error, can not go LEFT **** "  << endl;
-                }else{
-                grid[pRef.row][pRef.col-1].currentPlayers.push_back(pRef.player);
+//                if((pRef.col-1)<1){
+//                cout << "\n**** Out of Range error, can not go LEFT **** "  << endl;
+//                }else{
+                //grid[pRef.row][pRef.col-1].currentPlayers.emplace_back(pRef.player);
+                grid.at(pRef.row).at(pRef.col-1).currentPlayers.emplace_back(pRef.player);
                 pRef.col--;
-                }
+             //   }
             } catch (const std::out_of_range& oor) {
-                std::cerr << "Out of Range error: " << oor.what() << '\n';
+                std::cerr << "\n**** Out of Range error, can not go LEFT ****" << '\n';
             }
             break;
         case RIGHT:
             try {
-                if((pRef.col+1)>columns){
-                cout << "\n**** Out of Range error, can not go RIGHT ****"  << endl;
-                }else{
-                grid[pRef.row][pRef.col+1].currentPlayers.push_back(pRef.player);
+//                if((pRef.col+1)>columns){
+//                cout << "\n**** Out of Range error, can not go RIGHT ****"  << endl;
+//                }else{
+                //grid[pRef.row][pRef.col+1].currentPlayers.emplace_back(pRef.player);
+                grid.at(pRef.row).at(pRef.col+1).currentPlayers.emplace_back(pRef.player);
                 pRef.col++;
-                }
+             //   }
             } catch (const std::out_of_range& oor) {
-                std::cerr << "Out of Range error: " << oor.what() << '\n';
+                std::cerr << "\n**** Out of Range error, can not go RIGHT ****" << '\n';
             }
             break;
         default:
