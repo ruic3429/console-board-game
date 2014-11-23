@@ -138,3 +138,70 @@ bool Jewler::action(Player &player)const{
     }
     return false;//not enough food
 }
+
+CartManufacturer::CartManufacturer(){}
+
+void CartManufacturer::print()const{
+    std::cout<<"For 7 pieces of gold, the capacity of the cart is increased by 3"<<std::endl;
+}
+
+Tile* CartManufacturer::clone()const{
+    return new CartManufacturer(*this);
+}
+
+bool CartManufacturer::action(Player &player)const{
+    if(player.canAct()){
+        if (player.getGold()>7) {
+            int cartCapacity = player.getCart();
+            cartCapacity = cartCapacity + 3;
+            player.setCart(cartCapacity);
+            player.setGold(player.getGold()-7);
+            player.setInventory(player.getInventory());
+            player.eat();
+            return true;
+        }
+        return false;// not enough gold
+    }
+    return false;//not enough food
+}
+
+SmallMarket::SmallMarket(){}
+
+void SmallMarket::print()const{
+    std::cout<<"A player can sell 1 roll of fabric, 1 jewel and 1 sack of spices for 8 pieces of gold"<<std::endl;
+}
+
+Tile* SmallMarket::clone()const{
+    return new SmallMarket(*this);
+}
+
+bool SmallMarket::action(Player &player)const{
+    if(player.canAct()){
+        if (player.getFabric()>1) {
+            if(player.getJewels()>1){
+                if(player.getSpice()>1){
+                    int gold;
+                    if((player.getCart()-player.getInventory())>8){
+                        gold = 8;
+                    }else{
+                        gold = player.getCart()-player.getInventory();
+                        if (gold==0) {
+                            return false;//not enough space on cart
+                        }
+                    }
+                    player.setGold(player.getJewels() + gold);
+                    player.setFabric(player.getFabric()-1);
+                    player.setJewels(player.getJewels()-1);
+                    player.setSpice(player.getSpice()-1);
+                    player.setInventory(player.getInventory()+gold);
+                    player.eat();
+                    return true;
+                }
+                return false;//not enough spices
+            }
+            return false;//not enough jewel
+        }
+        return false;// not enough fabric
+    }
+    return false;//not enough food
+}
