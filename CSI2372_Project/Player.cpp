@@ -13,6 +13,14 @@
 
 Player::Player(std::string playerName){
     name = playerName;
+    gold = 5;
+    ruby = 0;
+    spice = 1;
+    fabric = 1;
+    jewel = 1;
+    food = 10;
+    cart = 9;
+    inventory = 3;
 }
 
 Player::Player(){
@@ -31,8 +39,12 @@ bool Player::canAct()const{
 }
 
 bool Player::pay(Player &player){
-    //need to implement
-    return true;
+    if(this->getGold()>0){
+        player.setGold(player.getGold()+1);
+        this->setGold(this->getGold()-1);
+        return true;
+    }
+    return false;
 }
 
 void Player::eat(){
@@ -95,6 +107,26 @@ int Player::getRuby(){
 
 int Player::getSpice(){
     return spice;
+}
+
+void Player::setInventory(int nInv){
+    inventory = nInv;
+}
+
+int Player::getInventory(){
+    return inventory;
+}
+
+void Player::printStats(){
+    std::cout<<name<<" Stats:"<<std::endl;
+    std::cout<<"--Inventory Size = "<<inventory<<std::endl;
+    std::cout<<"--Cart = "<<cart<<std::endl;
+    std::cout<<"--Gold = "<<gold<<std::endl;
+    std::cout<<"--Ruby = "<<ruby<<std::endl;
+    std::cout<<"--Food = "<<food<<std::endl;
+    std::cout<<"--Jewel = "<<jewel<<std::endl;
+    std::cout<<"--Fabric = "<<fabric<<std::endl;
+    std::cout<<"--Spice = "<<spice<<std::endl;
 }
 
 
