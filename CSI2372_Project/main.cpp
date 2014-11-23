@@ -11,6 +11,7 @@
 #include <vector>
 #include "GameBoard.h"
 #include "Tile.h"
+#include "TileFactory.h"
 
 using namespace std;
 
@@ -26,6 +27,7 @@ int main() {
     int row;
     int col;
     string playerOnMove;
+    string yOrN;
 
     cout << "Welcome to the Board Game !\n" << endl;
     
@@ -55,7 +57,7 @@ int main() {
     cin >> name;
     nameCollection.push_back(name);
     cout << "Player's name is: " << name[0] << endl;
-    Player* player = new Player(name);
+    Player player = *new Player(name);
     cout << "\n" <<endl;
     //}
     
@@ -64,23 +66,30 @@ int main() {
     
     //Generte Board
     GameBoard<Tile, Player> * board = new GameBoard<Tile, Player>(rows,cols,num_Player);
+    try{
+    TileFactory * tf = TileFactory::get(rows*cols);
     for (int i = 0; i< rows; i++) {
         for (int j = 0; j< cols; j++) {
-            Tile * t = new Tile();
-            board->add(*t, i, j);
-            delete t;
+            board->add(*tf->next(), i, j);
         }
     }
-    
-    board->setPlayer(*player, rows, cols);
-    
+    board->setPlayer(player, rows, cols);
+    }catch(const std::out_of_range& oor){
+        std::cerr << "\n**** Failed to generate Board ****\n What to generate again? (yes / no) " << '\n';
+        cin >> yOrN;
+        if(yOrN == "yes"){
+            return main();
+        }else{
+            return 0;
+        }
+    }
     cout << "Board generated successfully !\n" << endl;
     
-    board->getPlayerCoordinates(player->getName(), &row, &col);
+    board->getPlayerCoordinates(player.getName(), &row, &col);
     cout << "Initial Location: " << "[" << row << "][" << col << "]\n" << endl;
     
-    while(player->getRuby() != 5){
-        board->getPlayerCoordinates(player->getName(), &row, &col);
+    while(player.getRuby() != 5){
+        board->getPlayerCoordinates(player.getName(), &row, &col);
         cout << "\nYou are at " << "[" << row << "][" << col << "]" << endl;
         board->printNeighbours(row, col);
         std::cout<<"Where do you want to move?"<<std::endl;
@@ -88,28 +97,31 @@ int main() {
         cin >> input;
         if (input=="down") {
             GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::DOWN;
-            playerOnMove = player->getName();
+            playerOnMove = player.getName();
             board->move(move, playerOnMove);
+            player.printStats();
         }else if (input=="up"){
             GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::UP;
-            playerOnMove = player->getName();
+            playerOnMove = player.getName();
             board->move(move, playerOnMove);
+            player.printStats();
         }else if (input=="left"){
             GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::LEFT;
-            playerOnMove = player->getName();
+            playerOnMove = player.getName();
             board->move(move, playerOnMove);
+            player.printStats();
         }else if (input=="right"){
             GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::RIGHT;
-            playerOnMove = player->getName();
+            playerOnMove = player.getName();
             board->move(move, playerOnMove);
+            player.printStats();
         }else{
             cout << "Unidentified Command." << endl;
         }
 
     }
     
-    
-    cout << "Player : " << player->getName() << " has won the game !\n" << endl;
+    cout << "Player : " << player.getName() << " has won the game !\n" << endl;
     
     cout << "Game Terminated !" << endl;
     

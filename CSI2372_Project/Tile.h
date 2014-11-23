@@ -103,6 +103,30 @@ public:
     void print()const;
 };
 
+class Casino: public Tile{
+public:
+    Casino();
+    bool action(Player& player)const;
+    Tile* clone()const;
+    void print()const;
+};
+
+class GemMerchant: public Tile{
+public:
+    GemMerchant();
+    bool action(Player& player)const;
+    Tile* clone()const;
+    void print()const;
+};
+
+class Palace: public Tile{
+public:
+    Palace();
+    bool action(Player& player)const;
+    Tile* clone()const;
+    void print()const;
+};
+
 
 
 
