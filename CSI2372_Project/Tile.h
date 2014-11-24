@@ -79,9 +79,9 @@ public:
     void print()const;
 };
 
-class JewlryMarket: public Tile{
+class JewelryMarket: public Tile{
 public:
-    JewlryMarket();
+    JewelryMarket();
     bool action(Player& player)const;
     Tile* clone()const;
     void print()const;

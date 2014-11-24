@@ -22,6 +22,7 @@ private:
     int jewel;
     int cart;
     int food;
+    int gemBuyTime;//index that player buy ruby in Gem Merchant
     int inventory;//size of current inventory<=capacity
 public:
     Player();
@@ -35,6 +36,7 @@ public:
     int getCart();
     int getFood();
     int getInventory();
+    int getGemBuyTime();
     void setGold(int nGold);
     void setRuby(int nRuby);
     void setSpice(int nSpice);
@@ -43,6 +45,7 @@ public:
     void setCart(int nCart);
     void setFood(int nFood);
     void setInventory(int nInv);
+    void setGemBuyTime(int gemBuy);
     bool canAct() const;
     bool pay(Player& player);
     void eat();

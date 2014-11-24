@@ -11,7 +11,7 @@
 #include <algorithm>
 
 TileFactory::TileFactory(int _nTiles){
-    int ratio = _nTiles/5;
+    int ratio = _nTiles/14;
     for (int i = 0; i<ratio; i++) {
         tiles.push_back(new Jewler());
         tiles.push_back(new FabricManufacturer());

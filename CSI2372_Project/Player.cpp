@@ -20,6 +20,7 @@ Player::Player(std::string playerName){
     jewel = 1;
     food = 10;
     cart = 9;
+    gemBuyTime = 0;
     inventory = 3;
 }
 
@@ -81,6 +82,10 @@ void Player::setSpice(int nSpice){
     spice = nSpice;
 }
 
+void Player::setGemBuyTime(int gemBuy){
+    gemBuyTime = gemBuy;
+}
+
 int Player::getCart(){
     return cart;
 }
@@ -107,6 +112,10 @@ int Player::getRuby(){
 
 int Player::getSpice(){
     return spice;
+}
+
+int Player::getGemBuyTime(){
+    return gemBuyTime;
 }
 
 void Player::setInventory(int nInv){
