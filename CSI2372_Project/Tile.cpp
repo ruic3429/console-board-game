@@ -45,7 +45,7 @@ SpiceMerchant::SpiceMerchant(){}
 
 bool SpiceMerchant::action(Player &player)const{
     if (player.canAct()) {
-        if (player.getGold()>1) {
+        if (player.getGold()>2) {
             int numSacks;
             if ((player.getCart()-player.getInventory())>2) {
                 numSacks=3;
@@ -86,7 +86,7 @@ Tile* FabricManufacturer::clone()const{
 
 bool FabricManufacturer::action(Player &player)const{
     if(player.canAct()){
-        if (player.getGold()>1) {
+        if (player.getGold()>2) {
             int numTissues;
             if((player.getCart()-player.getInventory())>2){
                 numTissues = 3;
@@ -119,7 +119,7 @@ Tile* Jewler::clone()const{
 
 bool Jewler::action(Player &player)const{
     if(player.canAct()){
-        if (player.getGold()>1) {
+        if (player.getGold()>2) {
             int numJewles;
             if((player.getCart()-player.getInventory())>2){
                 numJewles = 3;
@@ -169,7 +169,7 @@ bool CartManufacturer::action(Player &player)const{
 SmallMarket::SmallMarket(){}
 
 void SmallMarket::print()const{
-    std::cout<<"Samll Market: A player can sell 1 roll of fabric, 1 jewel and 1 sack of spices for 8 pieces of gold"<<std::endl;
+    std::cout<<"Small Market: A player can sell 1 roll of fabric, 1 jewel and 1 sack of spices for 8 pieces of gold"<<std::endl;
 }
 
 Tile* SmallMarket::clone()const{
@@ -182,7 +182,7 @@ bool SmallMarket::action(Player &player)const{
             if(player.getJewels()>1){
                 if(player.getSpice()>1){
                     int gold = 8;
-                    player.setGold(player.getJewels() + gold);
+                    player.setGold(player.getGold() + gold);
                     player.setFabric(player.getFabric()-1);
                     player.setJewels(player.getJewels()-1);
                     player.setSpice(player.getSpice()-1);
@@ -212,16 +212,17 @@ Tile* SpiceMarket::clone()const{
 bool SpiceMarket::action(Player &player)const{
     if(player.canAct()){
         if (player.getSpice()>0) {
-            int spices;
-            int gold;
+            int spices = 0;
+            int gold = 0;
             if(player.getSpice() == 1){
-                spices = player.getSpice();
+                spices = 1;
                 gold = 2;
             }
             if(player.getSpice() == 2){
-                spices = player.getSpice();
+                spices = 2;
                 gold = 4;
-            }else{
+            }
+            if(player.getSpice() >= 3){
                 spices = 3;
                 gold = 6;
             }
@@ -249,16 +250,17 @@ Tile* JewelryMarket::clone()const{
 bool JewelryMarket::action(Player &player)const{
     if(player.canAct()){
         if (player.getJewels()>0) {
-            int jewelry;
-            int gold;
+            int jewelry = 0;
+            int gold = 0;
             if(player.getJewels() == 1){
-                jewelry = player.getJewels();
+                jewelry = 1;
                 gold = 2;
             }
             if(player.getJewels() == 2){
-                jewelry = player.getJewels();
+                jewelry = 2;
                 gold = 4;
-            }else{
+            }
+            if(player.getJewels() >= 3){
                 jewelry = 3;
                 gold = 6;
             }
@@ -275,7 +277,7 @@ bool JewelryMarket::action(Player &player)const{
 FabricMarket::FabricMarket(){}
 
 void FabricMarket::print()const{
-    std::cout<<"Jewlry Market: A player can sell 3 rolls of fabric for 6 pieces of gold"<<std::endl;
+    std::cout<<"Fabric Market: For 2 pieces of gold, th player gets 3 rolls of fabrics tissues(less if player does not have capacity)"<<std::endl;
 }
 
 Tile* FabricMarket::clone()const{
@@ -285,16 +287,17 @@ Tile* FabricMarket::clone()const{
 bool FabricMarket::action(Player &player)const{
     if(player.canAct()){
         if (player.getJewels()>0) {
-            int fabric;
-            int gold;
+            int fabric = 0;
+            int gold = 0;
             if(player.getFabric() == 1){
-                fabric = player.getFabric();
+                fabric = 1;
                 gold = 2;
             }
             if(player.getFabric() == 2){
-                fabric = player.getFabric();
+                fabric = 2;
                 gold = 4;
-            }else{
+            }
+            if(player.getFabric() >= 3){
                 fabric = 3;
                 gold = 6;
             }
@@ -326,57 +329,70 @@ bool BlackMarket::action(Player &player)const{
             std::mt19937 gen(rd());
             std::uniform_int_distribution<> randomItem(1,3);
             std::uniform_int_distribution<> randomQuatity(0,5);
-            if(randomItem(gen) == 1){
-                int totalSpices = randomQuatity(gen);
-                int spicesGained;
-                if((player.getCart()-player.getInventory())>totalSpices){
-                    spicesGained = totalSpices;
-                }else{
-                    spicesGained = player.getCart()-player.getInventory();
-                    if (spicesGained==0) {
-                        return false;//not enough space on cart
-                    }
-                }
-                player.setSpice(player.getSpice()+spicesGained);
-                player.setGold(player.getGold()-1);
-                player.setInventory(player.getInventory()+spicesGained);
-                player.eat();
-                return true;
+            int quatityAdded;
+            if(randomQuatity(gen)<(player.getCart()-player.getInventory())){
+                quatityAdded = (player.getCart()-player.getInventory()); // not enough room on cart
+            }else{
+                quatityAdded = randomQuatity(gen);
             }
-            if(randomItem(gen) == 2){
-                int totalFabrics = randomQuatity(gen);
-                int fabricesGained;
-                if((player.getCart()-player.getInventory())>totalFabrics){
-                    fabricesGained = totalFabrics;
-                }else{
-                    fabricesGained = player.getCart()-player.getInventory();
-                    if (fabricesGained==0) {
-                        return false;//not enough space on cart
+            for(int i = 0; i < quatityAdded; i++){
+            switch (randomItem(gen)) {
+                {case 1:
+                    int totalSpices = randomQuatity(gen);
+                    int spicesGained;
+                    if((player.getCart()-player.getInventory())>totalSpices){
+                        spicesGained = totalSpices;
+                    }else{
+                        spicesGained = player.getCart()-player.getInventory();
+                        if (spicesGained==0) {
+                            return false;//not enough space on cart
+                        }
                     }
+                    player.setSpice(player.getSpice()+spicesGained);
+                    player.setGold(player.getGold()-1);
+                    player.setInventory(player.getInventory()+spicesGained);
+                    player.eat();
+                    break;
                 }
-                player.setFabric(player.getFabric()+fabricesGained);
-                player.setGold(player.getGold()-1);
-                player.setInventory(player.getInventory()+fabricesGained);
-                player.eat();
-                return true;
-            }
-            if(randomItem(gen) == 3){
-                int totalJewelry = randomQuatity(gen);
-                int jewelryGained;
-                if((player.getCart()-player.getInventory())>totalJewelry){
-                    jewelryGained = totalJewelry;
-                }else{
-                    jewelryGained = player.getCart()-player.getInventory();
-                    if (jewelryGained==0) {
-                        return false;//not enough space on cart
+                {case 2:
+                    int totalFabrics = randomQuatity(gen);
+                    int fabricesGained;
+                    if((player.getCart()-player.getInventory())>totalFabrics){
+                        fabricesGained = totalFabrics;
+                    }else{
+                        fabricesGained = player.getCart()-player.getInventory();
+                        if (fabricesGained==0) {
+                            return false;//not enough space on cart
+                        }
                     }
+                    player.setFabric(player.getFabric()+fabricesGained);
+                    player.setGold(player.getGold()-1);
+                    player.setInventory(player.getInventory()+fabricesGained);
+                    player.eat();
+                    break;
                 }
-                player.setJewels(player.getJewels()+jewelryGained);
-                player.setGold(player.getGold()-1);
-                player.setInventory(player.getInventory()+jewelryGained);
-                player.eat();
-                return true;
+                {case 3:
+                    int totalJewelry = randomQuatity(gen);
+                    int jewelryGained;
+                    if((player.getCart()-player.getInventory())>totalJewelry){
+                        jewelryGained = totalJewelry;
+                    }else{
+                        jewelryGained = player.getCart()-player.getInventory();
+                        if (jewelryGained==0) {
+                            return false;//not enough space on cart
+                        }
+                    }
+                    player.setJewels(player.getJewels()+jewelryGained);
+                    player.setGold(player.getGold()-1);
+                    player.setInventory(player.getInventory()+jewelryGained);
+                    player.eat();
+                    break;
+                }
+                default:
+                    break;
+                }
             }
+            return true;
         }
         return false;// not enough gold
     }

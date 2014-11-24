@@ -1,49 +1,36 @@
-//
-//  GameBoard.h
-//  CSI2372_Project
-//
-//  Created by Richard on 2014-11-07.
-//  Copyright (c) 2014 Richard. All rights reserved.
-//
-
-#ifndef __CSI2372_Project__GameBoard__
-#define __CSI2372_Project__GameBoard__
+#ifndef __boardGameCode__GameBoard__
+#define __boardGameCode__GameBoard__
 
 #include <stdio.h>
-#include <cstdlib>
-#include <time.h>
-#include "Player.h"
 #include <vector>
+#include <iostream>
 
-using namespace std;
-
-template <class T, class J>
-class GameBoard {
-    
+template <class T,class J>
+class GameBoard{
 public:
-    enum Move{UP, DOWN, LEFT, RIGHT};
+    enum Move {UP,DOWN,LEFT,RIGHT};
     struct square{
         std::vector<J> currentPlayers;
-        T tile;
+        T * tile;
     };
     struct playerRef{
         int row;
         int col;
         J player;
     };
-    GameBoard();
     GameBoard(int r, int c, int n);
-    void add(const T& title, int row, int col);
-    const T& getTile(int row, int col) const;
+    void add(const T& tile,int row, int col);
+    const T & getTile(int row, int col)const;
     void getCoordinates(const T &tile, int * row, int * col) const;
-    void setPlayer(J player, int rows, int cols);
-    J getPlayer(const std::string& playerName) const;
-    const T& getTile(const std::string& playerName) const;
+    void setPlayer(J player, int row, int col);
+    J getPlayer(const std::string & playerName) const;
     std::vector<J> getPlayers(const T& tile) const;
-    const T& move(enum Move move, const std::string& playerName);
+    const T& move(enum Move move, const std::string & playerName);
     void printNeighbours(int row, int col);
     void getPlayerCoordinates(const std::string& playerName, int * row, int * col);
-    
+    template<class X,class Y> friend std::istream& operator >> (std::istream& is, GameBoard<X,Y> & game);
+    template<class X,class Y> friend std::ostream& operator << (std::ostream& os, const GameBoard<X,Y> & game);
+    bool payPlayers(J& player, int row, int col);
 private:
     void moveUpdate(playerRef& pRef, enum Move move);
     std::vector<std::vector<square>> grid;
@@ -64,7 +51,7 @@ GameBoard<T,J>::GameBoard(int r, int c, int n){
 template <class T,class J>
 void GameBoard<T,J>::add(const T& tile,int row, int col){
     try{
-        grid.at(row).at(col).tile = *new T(tile);
+        grid.at(row).at(col).tile = tile.clone();
     }
     catch (const std::out_of_range& oor) {
         std::cerr << "Out of Range error: " << oor.what() << '\n';
@@ -74,19 +61,19 @@ void GameBoard<T,J>::add(const T& tile,int row, int col){
 template <class T, class J>
 const T & GameBoard<T,J>::getTile(int row, int col)const{
     try{
-        const T & tile = new T(grid.at(row).at(col).tile);
-        return tile;
+        return *grid.at(row).at(col).tile;
     }
     catch (const std::out_of_range& oor) {
         std::cerr << "Out of Range error: " << oor.what() << '\n';
     }
+    return *grid.at(row).at(col).tile;
 }
 
 template <class T, class J>
 void GameBoard<T,J>::getCoordinates(const T& tile, int *row, int *col)const{
     for (int i = 0; i<rows; i++) {
         for (int j = 0; j<columns; j++) {
-            if (&grid.at(i).at(j).tile == &tile) {
+            if (&grid[i][j].tile == &tile) {
                 *row = i;
                 *col = j;
             }
@@ -103,9 +90,8 @@ void GameBoard<T,J>::setPlayer(J player, int rows, int columns){
     temp.col = rand() % columns + 1;
     playerList.push_back(temp);
     grid.at(temp.row).at(temp.col).currentPlayers.push_back(player);
-
+    
 }
-
 template <class T, class J>
 J GameBoard<T,J>::getPlayer(const std::string& playerName)const{
     for (int i = 0; i<playerList.size(); i++) {
@@ -144,25 +130,31 @@ const T& GameBoard<T,J>::move(enum Move move, const std::string& playerName){
     }
     GameBoard<T,J>::moveUpdate(tempPlayer, move);
     playerList[i]=tempPlayer;
-    return grid[tempPlayer.row][tempPlayer.col].tile;
+    return *grid.at(tempPlayer.row).at(tempPlayer.col).tile;
 }
 
 template <class T, class J>
 void GameBoard<T,J>::printNeighbours(int row, int col){
-    cout << "Possible moves are { ";
-    if(col<columns){
-        std::cout<<"RIGHT ";
+    if(row<rows-1){
+        std::cout<<"\n***Down***"<<std::endl;
+        grid[row+1][col].tile->clone()->print();
+        std::cout << "\n" << std::endl;
     }
-    if(col>1){
-        std::cout<<"LEFT ";
+    if(row>0){
+        std::cout<<"***Up***"<<std::endl;
+        grid[row-1][col].tile->clone()->print();
+        std::cout << "\n" << std::endl;
     }
-    if(row<rows){
-        std::cout<<"DOWN ";
+    if(col<columns-1){
+        std::cout<<"***Right***"<<std::endl;
+        grid[row][col+1].tile->clone()->print();
+        std::cout << "\n" << std::endl;
     }
-    if(row>1){
-        std::cout<<"UP ";
+    if(col>0){
+        std::cout<<"***Left***"<<std::endl;
+        grid[row][col-1].tile->clone()->print();
+        std::cout << "\n" << std::endl;
     }
-    cout << "}" << endl;
 }
 
 template <class T, class J>
@@ -180,54 +172,34 @@ void GameBoard<T,J>::moveUpdate(GameBoard::playerRef& pRef, enum Move move){
     switch (move) {
         case UP:
             try {
-//                if ((pRef.row-1)<1) {
-//                    cout << "\n**** Out of Range error, can not go UP ****" << endl;
-//                }else{
-                //grid[pRef.row-1][pRef.col].currentPlayers.emplace_back(pRef.player);
-                grid.at(pRef.row-1).at(pRef.col).currentPlayers.emplace_back(pRef.player);
+                grid.at(pRef.row-1).at(pRef.col).currentPlayers.push_back(pRef.player);
                 pRef.row--;
-               // }
             } catch (const std::out_of_range& oor) {
-                std::cerr << "\n**** Out of Range error, can not go UP ****" << '\n';
+                std::cerr << "Out of Range error: " << oor.what() << '\n';
             }
             break;
         case DOWN:
             try {
-//                if((pRef.row+1)>rows){
-//                    cout << "\n**** Out of Range error, can not go DOWN ****" << endl;
-//                }else{
-                //grid[pRef.row+1][pRef.col].currentPlayers.emplace_back(pRef.player);
-                grid.at(pRef.row+1).at(pRef.col).currentPlayers.emplace_back(pRef.player);
+                grid.at(pRef.row++).at(pRef.col).currentPlayers.push_back(pRef.player);
                 pRef.row++;
-             //   }
             } catch (const std::out_of_range& oor) {
-                std::cerr << "\n**** Out of Range error, can not go DOWN ****" << '\n';
+                std::cerr << "Out of Range error: " << oor.what() << '\n';
             }
             break;
         case LEFT:
             try {
-//                if((pRef.col-1)<1){
-//                cout << "\n**** Out of Range error, can not go LEFT **** "  << endl;
-//                }else{
-                //grid[pRef.row][pRef.col-1].currentPlayers.emplace_back(pRef.player);
-                grid.at(pRef.row).at(pRef.col-1).currentPlayers.emplace_back(pRef.player);
+                grid.at(pRef.row).at(pRef.col-1).currentPlayers.push_back(pRef.player);
                 pRef.col--;
-             //   }
             } catch (const std::out_of_range& oor) {
-                std::cerr << "\n**** Out of Range error, can not go LEFT ****" << '\n';
+                std::cerr << "Out of Range error: " << oor.what() << '\n';
             }
             break;
         case RIGHT:
             try {
-//                if((pRef.col+1)>columns){
-//                cout << "\n**** Out of Range error, can not go RIGHT ****"  << endl;
-//                }else{
-                //grid[pRef.row][pRef.col+1].currentPlayers.emplace_back(pRef.player);
-                grid.at(pRef.row).at(pRef.col+1).currentPlayers.emplace_back(pRef.player);
+                grid.at(pRef.row).at(pRef.col+1).currentPlayers.push_back(pRef.player);
                 pRef.col++;
-             //   }
             } catch (const std::out_of_range& oor) {
-                std::cerr << "\n**** Out of Range error, can not go RIGHT ****" << '\n';
+                std::cerr << "Out of Range error: " << oor.what() << '\n';
             }
             break;
         default:
@@ -235,7 +207,33 @@ void GameBoard<T,J>::moveUpdate(GameBoard::playerRef& pRef, enum Move move){
     }
 }
 
+template <class X, class Y>
+std::istream& operator >> (std::istream& is, GameBoard<X,Y>& game){
+    is>>game;
+    return is;
+}
+
+template <class X, class Y>
+std::ostream& operator << (std::ostream& os, const GameBoard<X,Y>& game){
+    os<< game;
+    return os;
+}
+
+template <class T, class J>
+bool GameBoard<T,J>::payPlayers(J& player, int row, int col){
+    bool check = false;
+    if (player.getGold()>=grid[row][col].currentPlayers.size()) {
+        for (int i = 0; i<grid[row][col].currentPlayers.size(); i++) {
+            if (grid[row][col].currentPlayers[i].getName() != player.getName()) {
+                check = player.pay(grid[row][col].currentPlayers[i]);
+            }
+        }
+    }
+    return check;
+}
 
 
 
-#endif /* defined(__CSI2372_Project__GameBoard__) */
+
+
+#endif /* defined(__boardGameCode__GameBoard__) */

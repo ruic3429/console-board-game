@@ -92,31 +92,37 @@ int main() {
         board->getPlayerCoordinates(player.getName(), &row, &col);
         cout << "\nYou are at " << "[" << row << "][" << col << "]" << endl;
         board->printNeighbours(row, col);
-        std::cout<<"Where do you want to move?"<<std::endl;
-        //getline(std::cin,input);
-        cin >> input;
+        std::cout<<"Where do you want to move?\n";
+        getline(std::cin,input);
         if (input=="down") {
             GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::DOWN;
             playerOnMove = player.getName();
             board->move(move, playerOnMove);
-            player.printStats();
         }else if (input=="up"){
             GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::UP;
             playerOnMove = player.getName();
             board->move(move, playerOnMove);
-            player.printStats();
         }else if (input=="left"){
             GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::LEFT;
             playerOnMove = player.getName();
             board->move(move, playerOnMove);
-            player.printStats();
         }else if (input=="right"){
             GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::RIGHT;
             playerOnMove = player.getName();
             board->move(move, playerOnMove);
-            player.printStats();
-        }else{
+        }
+        else{
             cout << "Unidentified Command." << endl;
+        }
+        if(input == "down" || input == "up" || input == "left" || input == "right"){
+            board->getPlayerCoordinates(player.getName(), &row, &col);
+            player.printStats();
+            string takeAction;
+            cout << "Do you want to take action? (yes / no) " << endl;
+            cin >> takeAction;
+            if(takeAction == "yes"){
+                board->getTile(row, col).clone()->action(player);
+            }
         }
 
     }
