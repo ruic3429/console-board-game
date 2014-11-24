@@ -17,7 +17,6 @@
 
 using namespace std;
 
-
 template <class T, class J>
 class GameBoard {
     
@@ -65,7 +64,7 @@ GameBoard<T,J>::GameBoard(int r, int c, int n){
 template <class T,class J>
 void GameBoard<T,J>::add(const T& tile,int row, int col){
     try{
-        grid[row][col].tile = *new T(tile);
+        grid.at(row).at(col).tile = *new T(tile);
     }
     catch (const std::out_of_range& oor) {
         std::cerr << "Out of Range error: " << oor.what() << '\n';
@@ -75,7 +74,7 @@ void GameBoard<T,J>::add(const T& tile,int row, int col){
 template <class T, class J>
 const T & GameBoard<T,J>::getTile(int row, int col)const{
     try{
-        const T & tile = new T(grid[row][col].tile);
+        const T & tile = new T(grid.at(row).at(col).tile);
         return tile;
     }
     catch (const std::out_of_range& oor) {
@@ -87,7 +86,7 @@ template <class T, class J>
 void GameBoard<T,J>::getCoordinates(const T& tile, int *row, int *col)const{
     for (int i = 0; i<rows; i++) {
         for (int j = 0; j<columns; j++) {
-            if (&grid[i][j].tile == &tile) {
+            if (&grid.at(i).at(j).tile == &tile) {
                 *row = i;
                 *col = j;
             }
