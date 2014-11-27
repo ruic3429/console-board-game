@@ -31,11 +31,11 @@ int main() {
 
     cout << "Welcome to the Board Game !\n" << endl;
     
-    cout << "Please input number of rows on board (rows is integer): ";
+    cout << "Please input number of rows on board (row is integer): ";
     cin >> rows;
     cout << "\n" << endl;
     
-    cout << "Please input number of columns on board (cols is integer): ";
+    cout << "Please input number of columns on board (col is integer): ";
     cin >> cols;
     cout << "\n" << endl;
     
@@ -133,5 +133,13 @@ int main() {
     
     
     return 0;
+}
+
+void getPlayerName(int num_Player){
+    string name;
+}
+
+void getNextAvailablePlayer(){
+    
 }
 
