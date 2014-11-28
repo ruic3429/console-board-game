@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <vector>
 #include <iostream>
+#include <random>
 
 template <class T,class J>
 class GameBoard{
@@ -73,7 +74,7 @@ template <class T, class J>
 void GameBoard<T,J>::getCoordinates(const T& tile, int *row, int *col)const{
     for (int i = 0; i<rows; i++) {
         for (int j = 0; j<columns; j++) {
-            if (&grid[i][j].tile == &tile) {
+            if (&grid.at(i).at(j).tile == &tile) {
                 *row = i;
                 *col = j;
             }
@@ -85,11 +86,14 @@ template <class T, class J>
 void GameBoard<T,J>::setPlayer(J player, int rows, int columns){
     playerRef temp;
     temp.player = player;
-    srand(static_cast<int>(time(0)));
-    temp.row = rand() % rows + 1;
-    temp.col = rand() % columns + 1;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> tempRow(0,rows-1);
+    std::uniform_int_distribution<> tempCol(0,columns-1);
+    temp.row = tempRow(gen);
+    temp.col = tempCol(gen);
     playerList.push_back(temp);
-    grid.at(temp.row).at(temp.col).currentPlayers.push_back(player);
+    grid.at(temp.row).at(temp.col).currentPlayers.emplace_back(player);
     
 }
 template <class T, class J>
@@ -137,22 +141,22 @@ template <class T, class J>
 void GameBoard<T,J>::printNeighbours(int row, int col){
     if(row<rows-1){
         std::cout<<"\n***Down***"<<std::endl;
-        grid[row+1][col].tile->clone()->print();
+        grid.at(row+1).at(col).tile->clone()->print();
         std::cout << "\n" << std::endl;
     }
     if(row>0){
         std::cout<<"***Up***"<<std::endl;
-        grid[row-1][col].tile->clone()->print();
+        grid.at(row-1).at(col).tile->clone()->print();
         std::cout << "\n" << std::endl;
     }
     if(col<columns-1){
         std::cout<<"***Right***"<<std::endl;
-        grid[row][col+1].tile->clone()->print();
+        grid.at(row).at(col+1).tile->clone()->print();
         std::cout << "\n" << std::endl;
     }
     if(col>0){
         std::cout<<"***Left***"<<std::endl;
-        grid[row][col-1].tile->clone()->print();
+        grid.at(row).at(col-1).tile->clone()->print();
         std::cout << "\n" << std::endl;
     }
 }
@@ -172,32 +176,49 @@ void GameBoard<T,J>::moveUpdate(GameBoard::playerRef& pRef, enum Move move){
     switch (move) {
         case UP:
             try {
-                grid.at(pRef.row-1).at(pRef.col).currentPlayers.push_back(pRef.player);
+                if(pRef.row-1 >= 0){
                 pRef.row--;
+                grid.at(pRef.row).at(pRef.col).currentPlayers.push_back(pRef.player);
+                }else{
+                    std::cerr << "Can't go UP" << std::endl;
+                }
             } catch (const std::out_of_range& oor) {
                 std::cerr << "Out of Range error: " << oor.what() << '\n';
             }
             break;
         case DOWN:
             try {
-                grid.at(pRef.row++).at(pRef.col).currentPlayers.push_back(pRef.player);
+                if(pRef.row+1 <= rows -1){
                 pRef.row++;
+                grid.at(pRef.row).at(pRef.col).currentPlayers.push_back(pRef.player);
+                }else{
+                    std::cerr << "Can't go DOWN" << std::endl;
+                }
+
             } catch (const std::out_of_range& oor) {
                 std::cerr << "Out of Range error: " << oor.what() << '\n';
             }
             break;
         case LEFT:
             try {
-                grid.at(pRef.row).at(pRef.col-1).currentPlayers.push_back(pRef.player);
+                if(pRef.col-1 >= 0){
                 pRef.col--;
+                grid.at(pRef.row).at(pRef.col).currentPlayers.push_back(pRef.player);
+                }else{
+                   std::cerr << "Can't go LEFT" << std::endl;
+                }
             } catch (const std::out_of_range& oor) {
                 std::cerr << "Out of Range error: " << oor.what() << '\n';
             }
             break;
         case RIGHT:
             try {
-                grid.at(pRef.row).at(pRef.col+1).currentPlayers.push_back(pRef.player);
+                if(pRef.col+1 <= columns-1){
                 pRef.col++;
+                grid.at(pRef.row).at(pRef.col).currentPlayers.push_back(pRef.player);
+                }else{
+                    std::cerr << "Can't go RIGHT" << std::endl;
+                }
             } catch (const std::out_of_range& oor) {
                 std::cerr << "Out of Range error: " << oor.what() << '\n';
             }

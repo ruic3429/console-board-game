@@ -16,6 +16,7 @@ Tile* Tile::clone()const{
 Tile::Tile(){}
 
 bool Tile::action(Player &player)const{
+    player.setTurn(player.getTurn()+1);
     return true;
 }
 
@@ -30,6 +31,7 @@ bool Restaurant::action(Player &player)const{
         player.setFood(10);
         return true;
     }
+    player.setTurn(player.getTurn()+1);
     return false;
 }
 
@@ -58,6 +60,7 @@ bool SpiceMerchant::action(Player &player)const{
             player.setSpice(player.getSpice()+numSacks);
             player.setGold(player.getGold()-2);
             player.setInventory(player.getInventory()+numSacks);
+            player.setTurn(player.getTurn()+1);
             player.eat();
             return true; //successful trade
         }
@@ -99,6 +102,7 @@ bool FabricManufacturer::action(Player &player)const{
             player.setFabric(player.getFabric()+numTissues);
             player.setGold(player.getGold()-2);
             player.setInventory(player.getInventory()+numTissues);
+            player.setTurn(player.getTurn()+1);
             player.eat();
             return true;
         }
@@ -132,6 +136,7 @@ bool Jewler::action(Player &player)const{
             player.setJewels(player.getJewels() + numJewles);
             player.setGold(player.getGold()-2);
             player.setInventory(player.getInventory()+numJewles);
+            player.setTurn(player.getTurn()+1);
             player.eat();
             return true;
         }
@@ -158,6 +163,7 @@ bool CartManufacturer::action(Player &player)const{
             player.setCart(cartCapacity);
             player.setGold(player.getGold()-7);
             player.setInventory(player.getInventory());
+            player.setTurn(player.getTurn()+1);
             player.eat();
             return true;
         }
@@ -187,6 +193,7 @@ bool SmallMarket::action(Player &player)const{
                     player.setJewels(player.getJewels()-1);
                     player.setSpice(player.getSpice()-1);
                     player.setInventory(player.getInventory()-3);
+                    player.setTurn(player.getTurn()+1);
                     player.eat();
                     return true;
                 }
@@ -229,6 +236,7 @@ bool SpiceMarket::action(Player &player)const{
             player.setSpice(player.getSpice()-spices);
             player.setGold(player.getGold()+gold);
             player.setInventory(player.getInventory()-spices);
+            player.setTurn(player.getTurn()+1);
             player.eat();
             return true;
         }
@@ -267,6 +275,7 @@ bool JewelryMarket::action(Player &player)const{
             player.setJewels(player.getJewels()-jewelry);
             player.setGold(player.getGold()+gold);
             player.setInventory(player.getInventory()-jewelry);
+            player.setTurn(player.getTurn()+1);
             player.eat();
             return true;
         }
@@ -304,6 +313,7 @@ bool FabricMarket::action(Player &player)const{
             player.setFabric(player.getFabric()-fabric);
             player.setGold(player.getGold()+gold);
             player.setInventory(player.getInventory()-fabric);
+            player.setTurn(player.getTurn()+1);
             player.eat();
             return true;
         }
@@ -351,6 +361,7 @@ bool BlackMarket::action(Player &player)const{
                     player.setSpice(player.getSpice()+spicesGained);
                     player.setGold(player.getGold()-1);
                     player.setInventory(player.getInventory()+spicesGained);
+                    player.setTurn(player.getTurn()+1);
                     player.eat();
                     break;
                 }
@@ -368,6 +379,7 @@ bool BlackMarket::action(Player &player)const{
                     player.setFabric(player.getFabric()+fabricesGained);
                     player.setGold(player.getGold()-1);
                     player.setInventory(player.getInventory()+fabricesGained);
+                    player.setTurn(player.getTurn()+1);
                     player.eat();
                     break;
                 }
@@ -385,6 +397,7 @@ bool BlackMarket::action(Player &player)const{
                     player.setJewels(player.getJewels()+jewelryGained);
                     player.setGold(player.getGold()-1);
                     player.setInventory(player.getInventory()+jewelryGained);
+                    player.setTurn(player.getTurn()+1);
                     player.eat();
                     break;
                 }
@@ -430,6 +443,7 @@ bool Casino::action(Player &player)const{
             }
             player.setGold(player.getGold()-1+goldEarned);
             player.setInventory(player.getInventory());
+            player.setTurn(player.getTurn()+1);
             player.eat();
             return true;
         }
@@ -458,6 +472,7 @@ bool GemMerchant::action(Player &player)const{
                 player.setGemBuyTime(player.getGemBuyTime()+1);
                 player.setGold(player.getGold()-cost);
                 player.setInventory(player.getInventory()+numRuby);
+                player.setTurn(player.getTurn()+1);
                 player.eat();
                 return true;
             }
@@ -490,6 +505,7 @@ bool Palace::action(Player &player)const{
                         player.setJewels(player.getJewels()-5);
                         player.setSpice(player.getSpice()-5);
                         player.setInventory(player.getInventory()+numRuby-15);
+                        player.setTurn(player.getTurn()+1);
                         player.eat();
                         return true;
                     }

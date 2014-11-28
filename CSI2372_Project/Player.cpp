@@ -22,6 +22,7 @@ Player::Player(std::string playerName){
     cart = 9;
     gemBuyTime = 0;
     inventory = 3;
+    turn = 0;
 }
 
 Player::Player(){
@@ -86,6 +87,10 @@ void Player::setGemBuyTime(int gemBuy){
     gemBuyTime = gemBuy;
 }
 
+void Player::setTurn(int round){
+    turn = round;
+}
+
 int Player::getCart(){
     return cart;
 }
@@ -116,6 +121,10 @@ int Player::getSpice(){
 
 int Player::getGemBuyTime(){
     return gemBuyTime;
+}
+
+int Player::getTurn(){
+    return turn;
 }
 
 void Player::setInventory(int nInv){

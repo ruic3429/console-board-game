@@ -24,6 +24,7 @@ private:
     int food;
     int gemBuyTime;//index that player buy ruby in Gem Merchant
     int inventory;//size of current inventory<=capacity
+    int turn;//number of turns in the game
 public:
     Player();
     Player(std::string playerName);
@@ -37,6 +38,7 @@ public:
     int getFood();
     int getInventory();
     int getGemBuyTime();
+    int getTurn();
     void setGold(int nGold);
     void setRuby(int nRuby);
     void setSpice(int nSpice);
@@ -46,6 +48,7 @@ public:
     void setFood(int nFood);
     void setInventory(int nInv);
     void setGemBuyTime(int gemBuy);
+    void setTurn(int turn);
     bool canAct() const;
     bool pay(Player& player);
     void eat();

@@ -17,10 +17,9 @@ using namespace std;
 
 int main() {
     
+    string startGame;
     int num_Player;
-    vector<string> nameCollection;
     string name;
-    //vector<Player*> player;
     string input;
     int rows;
     int cols;
@@ -28,8 +27,19 @@ int main() {
     int col;
     string playerOnMove;
     string yOrN;
+    vector<Player> players;
+    int currentRound = 0;
+    bool checkWin;
 
     cout << "Welcome to the Board Game !\n" << endl;
+    
+    cout << "DO you want to reload game or create game? <type 'reload' or 'create' to continue > " << endl;
+    cin >> startGame;
+    if(startGame == "reload"){
+        cout << "Game reloaded" << endl;
+        //inGame(num_Player, players, currentRound, board, checkWin);
+    }
+    else if(startGame == "create"){
     
     cout << "Please input number of rows on board (row is integer): ";
     cin >> rows;
@@ -48,19 +58,8 @@ int main() {
     cout << "" << endl;
     
     //generate players
-    //for(int i = 0; i < num_Player; i++){
-    cout << "Please enter player's name: ";
-    //cin >>  name[i];
-    //cout << "Player's name is: " << name[i] << endl;
-    //Player* player = new Player(name[i]);
-    //player[i] = new Player(name[i]);
-    cin >> name;
-    nameCollection.push_back(name);
-    cout << "Player's name is: " << name[0] << endl;
-    Player player = *new Player(name);
-    cout << "\n" <<endl;
-    //}
-    
+    void getPlayerName(int num_Player, vector<Player> &players);
+    getPlayerName(num_Player, players);
     
     cout << "Generating Board, please wait...\n" << endl;
     
@@ -73,7 +72,7 @@ int main() {
             board->add(*tf->next(), i, j);
         }
     }
-    board->setPlayer(player, rows, cols);
+    
     }catch(const std::out_of_range& oor){
         std::cerr << "\n**** Failed to generate Board ****\n What to generate again? (yes / no) " << '\n';
         cin >> yOrN;
@@ -83,63 +82,160 @@ int main() {
             return 0;
         }
     }
-    cout << "Board generated successfully !\n" << endl;
     
-    board->getPlayerCoordinates(player.getName(), &row, &col);
-    cout << "Initial Location: " << "[" << row << "][" << col << "]\n" << endl;
-    
-    while(player.getRuby() != 5){
-        board->getPlayerCoordinates(player.getName(), &row, &col);
-        cout << "\nYou are at " << "[" << row << "][" << col << "]" << endl;
-        board->printNeighbours(row, col);
-        std::cout<<"Where do you want to move?\n";
-        getline(std::cin,input);
-        if (input=="down") {
-            GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::DOWN;
-            playerOnMove = player.getName();
-            board->move(move, playerOnMove);
-        }else if (input=="up"){
-            GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::UP;
-            playerOnMove = player.getName();
-            board->move(move, playerOnMove);
-        }else if (input=="left"){
-            GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::LEFT;
-            playerOnMove = player.getName();
-            board->move(move, playerOnMove);
-        }else if (input=="right"){
-            GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::RIGHT;
-            playerOnMove = player.getName();
-            board->move(move, playerOnMove);
-        }
-        else{
-            cout << "Unidentified Command." << endl;
-        }
-        if(input == "down" || input == "up" || input == "left" || input == "right"){
-            board->getPlayerCoordinates(player.getName(), &row, &col);
-            player.printStats();
-            string takeAction;
-            cout << "Do you want to take action? (yes / no) " << endl;
-            cin >> takeAction;
-            if(takeAction == "yes"){
-                board->getTile(row, col).clone()->action(player);
-            }
-        }
-
+    for(int i = 0; i < num_Player-1; i++){
+        board->setPlayer(players.at(i), rows, cols);
     }
     
-    cout << "Player : " << player.getName() << " has won the game !\n" << endl;
+    cout << "Board generated successfully !\n" << endl;
+    
+    for(int i = 0; i < num_Player-1; i++){
+    board->getPlayerCoordinates(players.at(i).getName(), &row, &col);
+    cout << "Initial Location of player " << players.at(i).getName()<< " : " << "[" << row << "][" << col << "]\n" << endl;
+    }
+    
+    void inGame(int num_Player, vector<Player> &players,int currentRound,GameBoard<Tile, Player> * board, bool checkWin);
+    inGame(num_Player, players, currentRound, board, checkWin);
+        
+    }else{
+        cout << "Invalid aguement " << endl;
+    }
     
     cout << "Game Terminated !" << endl;
+    
+    cout << "Want to start again? <type 'yes' to restart>" << endl;
+    string restart;
+    cin >> restart;
+    if(restart == "yes"){
+        return main();
+    }else{
+        return 0;
+    }
     
     
     return 0;
 }
 
-void getPlayerName(int num_Player){
+void getPlayerName(int num_Player, vector<Player> &players){
     string name;
+    
+    //generate players
+    for(int i = 1; i <= num_Player; i++){
+        cout << "Please enter player's name for player No." << i << " : ";
+        cin >>  name;
+        cout << "Player's name is: " << name << endl;
+        Player player = *new Player(name);
+        players.emplace_back(player);
+        cout << "\n" <<endl;
+    }
 }
 
-void getNextAvailablePlayer(){
-    
+Player getNextAvailablePlayer(int num_Player,vector<Player> &players,int currentRound){
+    Player player;
+    for(int i = 0; i <= num_Player-1; i++){
+        if(players.at(i).getTurn() == currentRound){
+            player = players.at(i);
+        }
+        else{
+            player = players.at(0);
+        }
+    }
+    return player;
 }
+
+Player getWinPlayer(int num_Player, vector<Player> &players){
+    
+    Player win = *new Player("Nobody");
+    for(int i = 0; i <= num_Player-1; i++){
+        if(players.at(i).getRuby() >= 5){
+            return players.at(i);
+        }
+    }
+    return win;
+}
+
+bool noPlayerWin(int num_Player, vector<Player> &players ){
+    
+    for (int i = 0; i <= num_Player-1; i++) {
+        if(players.at(i).getRuby()>5){
+            return false;
+        }
+    }
+    return true;
+}
+
+bool needUpdateRound(int num_Player, vector<Player> &players, int currentRound){
+    
+    for (int i = 0; i <= num_Player-1; i++) {
+        if(players.at(i).getTurn() == currentRound){
+            return false;
+        }
+    }
+    return true;
+}
+
+void inGame(int num_Player, vector<Player> &players,int currentRound,GameBoard<Tile, Player> * board, bool checkWin){
+    int row;
+    int col;
+    
+    checkWin = checkWin = noPlayerWin(num_Player, players);
+    
+    while(checkWin){
+        Player player = getNextAvailablePlayer(num_Player, players, currentRound);
+        board->getPlayerCoordinates(player.getName(), &row, &col);
+        cout << "\n" << player.getName() << " is at " << "[" << row << "][" << col << "]" << endl;
+        board->printNeighbours(row, col);
+        std::cout<<"Where to move?"<<std::endl;
+        
+        string input;
+        string playerOnMove;
+        getline(std::cin,input);
+        if(input != ""){
+            if (input=="down") {
+                GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::DOWN;
+                playerOnMove = player.getName();
+                board->move(move, playerOnMove);
+            }else if (input=="up"){
+                GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::UP;
+                playerOnMove = player.getName();
+                board->move(move, playerOnMove);
+            }else if (input=="left"){
+                GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::LEFT;
+                playerOnMove = player.getName();
+                board->move(move, playerOnMove);
+            }else if (input=="right"){
+                GameBoard<Tile, Player>::Move move = GameBoard<Tile, Player>::Move::RIGHT;
+                playerOnMove = player.getName();
+                playerOnMove = player.getName();
+                board->move(move, playerOnMove);
+            }
+            else{
+                cout << "Unidentified Command." << endl;
+            }
+            
+            if(input == "down" || input == "up" || input == "left" || input == "right"){
+                board->getPlayerCoordinates(player.getName(), &row, &col);
+                cout << "\n" << endl;
+                player.printStats();
+                string takeAction;
+                cout << "Do you want to take action? (yes / no) " << endl;
+                cin >> takeAction;
+                if(takeAction == "yes"){
+                    board->getTile(row, col).clone()->action(player);
+                }
+            }
+        }
+        
+        bool needUpdate = needUpdateRound(num_Player, players, currentRound);
+        if(needUpdate){
+            currentRound++;
+        }
+        
+        checkWin = checkWin = noPlayerWin(num_Player, players);
+    }
+    
+    Player winPlayer = getWinPlayer(num_Player, players);
+    cout << "Player : " << winPlayer.getName() << " has won the game !\n" << endl;
+}
+
 
