@@ -58,8 +58,8 @@ int main() {
     cout << "" << endl;
     
     //generate players
-    void getPlayerName(int num_Player, vector<Player> &players);
-    getPlayerName(num_Player, players);
+    vector<Player> getPlayerName(int num_Player, vector<Player> &players);
+    players = getPlayerName(num_Player, players);
     
     cout << "Generating Board, please wait...\n" << endl;
     
@@ -83,8 +83,8 @@ int main() {
         }
     }
     
-    for(int i = 0; i < num_Player-1; i++){
-        board->setPlayer(players.at(i), rows, cols);
+    for(int i = 0; i <= num_Player-1; i++){
+        board->setPlayer(players[i], rows, cols);
     }
     
     cout << "Board generated successfully !\n" << endl;
@@ -116,7 +116,7 @@ int main() {
     return 0;
 }
 
-void getPlayerName(int num_Player, vector<Player> &players){
+vector<Player> getPlayerName(int num_Player, vector<Player> &players){
     string name;
     
     //generate players
@@ -128,20 +128,22 @@ void getPlayerName(int num_Player, vector<Player> &players){
         players.emplace_back(player);
         cout << "\n" <<endl;
     }
+    
+    return players;
 }
 
-Player getNextAvailablePlayer(int num_Player,vector<Player> &players,int currentRound){
-    Player player;
-    for(int i = 0; i <= num_Player-1; i++){
-        if(players.at(i).getTurn() == currentRound){
-            player = players.at(i);
-        }
-        else{
-            player = players.at(0);
-        }
-    }
-    return player;
-}
+//Player getNextAvailablePlayer(int num_Player,vector<Player> &players,int currentRound){
+//    Player player;
+//    for(int i = 0; i <= num_Player-1; i++){
+//        if(players.at(i).getTurn() == currentRound){
+//            player = players.at(i);
+//        }
+//        else{
+//            player = players.at(0);
+//        }
+//    }
+//    return player;
+//}
 
 Player getWinPlayer(int num_Player, vector<Player> &players){
     
@@ -180,8 +182,12 @@ void inGame(int num_Player, vector<Player> &players,int currentRound,GameBoard<T
     
     checkWin = checkWin = noPlayerWin(num_Player, players);
     
-    while(checkWin){
-        Player player = getNextAvailablePlayer(num_Player, players, currentRound);
+    //while(true){
+        
+    for(int i = 0; i <= num_Player-1; i++){
+            
+        Player player = players[i];
+        if(player.getRuby()<5){
         board->getPlayerCoordinates(player.getName(), &row, &col);
         cout << "\n" << player.getName() << " is at " << "[" << row << "][" << col << "]" << endl;
         board->printNeighbours(row, col);
@@ -226,13 +232,13 @@ void inGame(int num_Player, vector<Player> &players,int currentRound,GameBoard<T
             }
         }
         
-        bool needUpdate = needUpdateRound(num_Player, players, currentRound);
-        if(needUpdate){
-            currentRound++;
-        }
-        
-        checkWin = checkWin = noPlayerWin(num_Player, players);
+        checkWin = noPlayerWin(num_Player, players);
+            if(!checkWin){
+                break;
+            }
     }
+}
+//}
     
     Player winPlayer = getWinPlayer(num_Player, players);
     cout << "Player : " << winPlayer.getName() << " has won the game !\n" << endl;
